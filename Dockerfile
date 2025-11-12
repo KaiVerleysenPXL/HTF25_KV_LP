@@ -9,7 +9,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy files
 COPY test.py .
 COPY 2.py .
-COPY Ocean_Health_Index_2018_global_scores.csv .
+COPY data.csv .
 
 # Train the model first
 RUN python test.py
