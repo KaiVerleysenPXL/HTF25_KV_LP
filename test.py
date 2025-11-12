@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 label = "CW"
 
 # Extract
-df = pd.read_csv("Ocean_Health_Index_2018_global_scores.csv")
+df = pd.read_csv("data.csv")
 
 # Transform
 # Eenvoudige data cleaning: duplicaten verwijderen
@@ -25,7 +25,7 @@ X = df[numeric_cols].drop(label, axis=1)
 y = df[label]
 
 # 3. Split into train and test sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0, random_state=42)
 
 # 4. Create and train a Random Forest regression model
 model = RandomForestRegressor(n_estimators=100, random_state=42)
