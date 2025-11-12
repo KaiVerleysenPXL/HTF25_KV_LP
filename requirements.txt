@@ -1,5 +1,7 @@
 pandas
 scikit-learn
-matplotlib
 joblib
+matplotlib
 pyarrow
+flask
+gunicorn
