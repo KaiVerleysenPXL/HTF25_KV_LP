@@ -62,10 +62,49 @@ ax1.set_title("Actual vs Predicted")
 
 # Feature importance
 top_features = feature_importance.head(10)
-ax2.barh(top_features['feature'], top_features['importance'])
+# Map dataset abbreviation column names to friendly full names for plotting.
+# If an abbreviation isn't in the map we fall back to the original column name.
+abbr_to_full = {
+	# Mapping updated to match the OHI attribute names provided by the user
+	'AO': 'Artisanal Fisheries',
+	'BD': 'Biodiversity',
+	'CP': 'Coastal Protection',
+	'CS': 'Carbon Storage',
+	'CW': 'Clean Water',
+	'ECO': 'Economies',
+	'FIS': 'Wild Caught Fisheries',
+	'FP': 'Food Provision',
+	'HAB': 'Habitats',
+	'ICO': 'Iconic Species',
+	'Index_': 'Index',
+	'LE': 'Livelihoods & Economies',
+	'LIV': 'Livelihoods',
+	'LSP': 'Lasting Special Places',
+	'MAR': 'Mariculture',
+	'NP': 'Natural Products',
+	'SP': 'Sense of Place',
+	'SPP': 'Species',
+	'TR': 'Tourism & Recreation',
+	'trnd_sc': 'Trend Score',
+	'are_km2': 'Area (km2)',
+	'Shape__Area': 'Shape Area',
+	'Shape__Length': 'Shape Length'
+}
+
+# Create the horizontal bar chart using numeric y positions so we can explicitly
+# set the tick labels (avoids matplotlib warnings and guarantees alignment).
+y_pos = list(range(len(top_features)))
+ax2.barh(y_pos, top_features['importance'])
 ax2.set_xlabel('Feature Importance')
 ax2.set_title('Random Forest Feature Importance')
+# Replace tick labels with full terms (fall back to original abbrev when unknown)
+friendly_labels = [abbr_to_full.get(f, f) for f in top_features['feature']]
+ax2.set_yticks(y_pos)
+ax2.set_yticklabels(friendly_labels)
+# Invert so the most important is on top
 ax2.invert_yaxis()
+# Increase left margin so longer labels don't get clipped
+fig.subplots_adjust(left=0.35)
 
 plt.tight_layout()
 plt.show()
