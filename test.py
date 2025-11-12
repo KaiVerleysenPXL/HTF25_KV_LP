@@ -4,6 +4,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 import joblib
 import matplotlib.pyplot as plt
+from utils import abbr_to_full, friendly_label_from_transformed
 
 label = "CW"
 
@@ -48,7 +49,12 @@ feature_importance = pd.DataFrame({
 }).sort_values('importance', ascending=False)
 
 print(f"\nTop 10 Most Important Features:")
-print(feature_importance.head(10))
+# Map feature keys to friendly labels for printing and plotting. Use helper to
+# handle any transformed-like names and fall back to original keys.
+feature_importance['feature_friendly'] = feature_importance['feature'].apply(
+	lambda f: friendly_label_from_transformed(f, X.columns.tolist(), abbr_to_full)
+)
+print(feature_importance.head(10).loc[:, ['feature_friendly', 'importance']])
 
 # 8. Visualizations
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
@@ -62,10 +68,13 @@ ax1.set_title("Actual vs Predicted")
 
 # Feature importance
 top_features = feature_importance.head(10)
-ax2.barh(top_features['feature'], top_features['importance'])
+ax2.barh(top_features['feature_friendly'], top_features['importance'])
 ax2.set_xlabel('Feature Importance')
 ax2.set_title('Random Forest Feature Importance')
 ax2.invert_yaxis()
+# Improve layout for long labels
+fig.subplots_adjust(left=0.35)
+ax2.tick_params(axis='y', labelsize=9)
 
 plt.tight_layout()
 plt.show()

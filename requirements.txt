@@ -5,3 +5,5 @@ matplotlib
 pyarrow
 flask
 gunicorn
+streamlit
+seaborn
